@@ -30,7 +30,6 @@ namespace Game.Board
                     var worldPos = pos + offset;
                     var square = Instantiate(squarePrefab, squareParent);
                     square.Initialize(worldPos, () => SelectedPos = pos);
-                    square.PutStone(board.GetSquareType(pos) ?? SquareType.Empty, token).Forget();
                     squares[col, row] = square;
                 }
 

@@ -43,9 +43,23 @@ namespace Game.Board
             };
         }
 
-        private UniTask Initialize(CancellationToken token)
+        private async UniTask Initialize(CancellationToken token)
         {
-            return view.CreateBoard(board, token);
+            await view.CreateBoard(board, token);
+            
+            // 初期配置
+            var firstStones = new Dictionary<Vector2Int, SquareType>
+            {
+                { new Vector2Int(COL_COUNT / 2 - 1, ROW_COUNT / 2 - 1), SquareType.White },
+                { new Vector2Int(COL_COUNT / 2, ROW_COUNT / 2 - 1), SquareType.Black },
+                { new Vector2Int(COL_COUNT / 2 - 1, ROW_COUNT / 2), SquareType.Black },
+                { new Vector2Int(COL_COUNT / 2, ROW_COUNT / 2), SquareType.White }
+            };
+            foreach (var (pos, type) in firstStones)
+            {
+                board.SetStone(type, pos);
+                await view.PutStone(type, pos, token);
+            }
         }
 
         private async UniTask WaitForSelectSquare(SquareType stoneType, CancellationToken token)
