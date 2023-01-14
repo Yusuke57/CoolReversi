@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Square;
@@ -32,6 +33,18 @@ namespace Game.Board
                 }
 
                 await UniTask.Delay(40, cancellationToken: token);
+            }
+        }
+
+        public void SetSquareHighlights(List<Vector2Int> highlightPoses)
+        {
+            for (var col = 0; col < squares.GetLength(0); col++)
+            {
+                for (var row = 0; row < squares.GetLength(1); row++)
+                {
+                    var pos = new Vector2Int(col, row);
+                    squares[col, row].SetHighlight(highlightPoses.Contains(pos));
+                }
             }
         }
     }

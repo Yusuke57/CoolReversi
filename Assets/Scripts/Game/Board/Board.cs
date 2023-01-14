@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using Game.Cycle;
 using UnityEngine;
 
 namespace Game.Board
 {
-    public class Board : ICheckFinishGame
+    public class Board
     {
         private readonly SquareType[,] squareTypes;
 
@@ -27,6 +26,9 @@ namespace Game.Board
 
         public int ColCount => squareTypes.GetLength(0);
         public int RowCount => squareTypes.GetLength(1);
+        
+        public SquareType PlayerStoneType = SquareType.Black;
+        public SquareType EnemyStoneType = SquareType.White;
 
         public SquareType? GetSquareType(Vector2Int pos)
         {
@@ -42,16 +44,9 @@ namespace Game.Board
             return squareTypes[pos.x, pos.y];
         }
 
-        public bool IsFinishedGame()
+        public bool IsEmpty(Vector2Int pos)
         {
-            var hasEmpty = false;
-            foreach (var squareType in squareTypes)
-            {
-                hasEmpty |= squareType == SquareType.Empty;
-            }
-
-            // TODO: 両者石を置けなくなったときもfinish判定する
-            return !hasEmpty;
+            return GetSquareType(pos) == SquareType.Empty;
         }
     }
 
