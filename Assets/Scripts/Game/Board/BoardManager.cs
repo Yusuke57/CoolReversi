@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Cycle;
@@ -36,7 +37,9 @@ namespace Game.Board
             return phase switch
             {
                 GameCycle.TurnPhase.SelectSquare => WaitForSelectSquare(stoneType, token),
-                _ => UniTask.Delay(1000)
+                GameCycle.TurnPhase.PutStone => PutStone(stoneType, token),
+                GameCycle.TurnPhase.ReverseStones => ReverseStones(stoneType, token),
+                _ => UniTask.CompletedTask
             };
         }
 
@@ -50,9 +53,57 @@ namespace Game.Board
             var canPutPoses = board.GetCanPutPoses(stoneType);
             view.SetSquareHighlights(canPutPoses);
 
-            await UniTask.Delay(3000, cancellationToken: token);
-            
+            view.ResetSelectedPos();
+            await UniTask.WaitUntil(() => view.SelectedPos.HasValue, cancellationToken: token);
             view.SetSquareHighlights(new List<Vector2Int>());
+        }
+
+        private async UniTask PutStone(SquareType stoneType, CancellationToken token)
+        {
+            if (!view.SelectedPos.HasValue)
+            {
+                return;
+            }
+            
+            // データ更新
+            var selectedPos = view.SelectedPos.Value;
+            board.SetStone(stoneType, selectedPos);
+            
+            // 表示更新
+            await view.PutStone(stoneType, selectedPos, token);
+        }
+
+        private async UniTask ReverseStones(SquareType stoneType, CancellationToken token)
+        {
+            if (!view.SelectedPos.HasValue)
+            {
+                return;
+            }
+
+            // データ更新
+            var selectedPos = view.SelectedPos.Value;
+            var reversePoses = board.GetReversePoses(stoneType, selectedPos);
+            foreach (var reversePos in reversePoses.SelectMany(pos => pos))
+            {
+                board.SetStone(stoneType, reversePos);
+            }
+            
+            // 表示更新
+            var reverseAnimPosGroups = Enumerable.Range(0, reversePoses.Max(c => c.Count))
+                .Select(i => reversePoses.Select(c => i < c.Count ? c[i] : (Vector2Int?) null));
+            foreach (var animPosGroup in reverseAnimPosGroups)
+            {
+                foreach (var animPos in animPosGroup)
+                {
+                    if (!animPos.HasValue)
+                    {
+                        continue;
+                    }
+                    view.ReverseStone(animPos.Value, token).Forget();
+                }
+
+                await UniTask.Delay(100, cancellationToken: token);
+            }
         }
 
         public bool IsFinishedGame()

@@ -48,6 +48,11 @@ namespace Game.Board
         {
             return GetSquareType(pos) == SquareType.Empty;
         }
+
+        public void SetStone(SquareType stoneType, Vector2Int pos)
+        {
+            squareTypes[pos.x, pos.y] = stoneType;
+        }
     }
 
     public enum SquareType

@@ -12,6 +12,8 @@ namespace Game.Board
         [SerializeField] private SquareView squarePrefab;
 
         private SquareView[,] squares;
+        
+        public Vector2Int? SelectedPos { get; private set; } = null;
 
         public async UniTask CreateBoard(Board board, CancellationToken token)
         {
@@ -27,8 +29,8 @@ namespace Game.Board
                     var pos = new Vector2Int(col, row);
                     var worldPos = pos + offset;
                     var square = Instantiate(squarePrefab, squareParent);
-                    square.Initialize(worldPos);
-                    square.SetStone(board.GetSquareType(pos) ?? SquareType.Empty);
+                    square.Initialize(worldPos, () => SelectedPos = pos);
+                    square.PutStone(board.GetSquareType(pos) ?? SquareType.Empty, token).Forget();
                     squares[col, row] = square;
                 }
 
@@ -46,6 +48,21 @@ namespace Game.Board
                     squares[col, row].SetHighlight(highlightPoses.Contains(pos));
                 }
             }
+        }
+
+        public void ResetSelectedPos()
+        {
+            SelectedPos = null;
+        }
+
+        public async UniTask PutStone(SquareType stoneType, Vector2Int pos, CancellationToken token)
+        {
+            await squares[pos.x, pos.y].PutStone(stoneType, token);
+        }
+
+        public async UniTask ReverseStone(Vector2Int pos, CancellationToken token)
+        {
+            await squares[pos.x, pos.y].ReverseStone(token);
         }
     }
 }
