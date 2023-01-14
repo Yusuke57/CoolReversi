@@ -14,15 +14,20 @@ namespace Game.Board
 
         public async UniTask CreateBoard(Board board, CancellationToken token)
         {
-            squares = new SquareView[board.ColCount, board.RowCount];
+            var colCount = board.ColCount;
+            var rowCount = board.RowCount;
+            squares = new SquareView[colCount, rowCount];
+            var offset = new Vector2(-colCount / 2f + 0.5f, -rowCount / 2f + 0.5f);
 
-            for (var col = 0; col < board.ColCount; col++)
+            for (var col = 0; col < colCount; col++)
             {
-                for (var row = 0; row < board.RowCount; row++)
+                for (var row = 0; row < rowCount; row++)
                 {
                     var pos = new Vector2Int(col, row);
+                    var worldPos = pos + offset;
                     var square = Instantiate(squarePrefab, squareParent);
-                    square.Initialize(pos);
+                    square.Initialize(worldPos);
+                    square.SetStone(board.GetSquareType(pos) ?? SquareType.Empty);
                     squares[col, row] = square;
                 }
 

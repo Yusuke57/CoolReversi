@@ -9,20 +9,21 @@ namespace Game.Cycle
     public class GameCycleExecutor : MonoBehaviour
     {
         [SerializeField] private GameObject[] subscribeObjects;
+        [SerializeField] private GameObject finishGameCheckerObject;
         private ISubscribeGamePhase[] gamePhaseSubscribers;
         private ISubscribeTurnPhase[] turnPhaseSubscribers;
-        private ICheckFinishGame[] finishGameCheckers;
+        private ICheckFinishGame finishGameChecker;
         
         private GameCycle cycle;
         private CancellationTokenSource tokenSource;
 
         private void Start()
         {
-            CacheSubscribers();
+            CacheInterfaces();
             Execute();
         }
 
-        private void CacheSubscribers()
+        private void CacheInterfaces()
         {
             gamePhaseSubscribers = subscribeObjects
                 .Select(obj => obj.GetComponent<ISubscribeGamePhase>())
@@ -33,6 +34,8 @@ namespace Game.Cycle
                 .Select(obj => obj.GetComponent<ISubscribeTurnPhase>())
                 .Where(component => component != null)
                 .ToArray();
+
+            finishGameChecker = finishGameCheckerObject.GetComponent<ICheckFinishGame>();
         }
 
         private void Execute()
@@ -44,7 +47,7 @@ namespace Game.Cycle
                 
                 cycle.OnGamePhaseChanged += OnGamePhaseChanged;
                 cycle.OnTurnPhaseChanged += OnTurnPhaseChanged;
-                cycle.IsFinishedGame += () => finishGameCheckers.Any(checker => checker.IsFinishedGame());
+                cycle.IsFinishedGame += () => finishGameChecker.IsFinishedGame();
                 cycle.PlayGame(tokenSource.Token).Forget();
             }
             catch (Exception e)

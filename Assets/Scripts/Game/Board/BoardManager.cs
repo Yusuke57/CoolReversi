@@ -33,7 +33,7 @@ namespace Game.Board
         {
             return phase switch
             {
-                _ => UniTask.CompletedTask
+                _ => UniTask.Delay(1000)
             };
         }
 

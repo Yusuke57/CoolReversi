@@ -11,9 +11,11 @@ namespace Game.Square
         [SerializeField] private Sprite blackStoneSprite;
         [SerializeField] private Sprite whiteStoneSprite;
 
-        public void Initialize(Vector2Int pos)
+        public void Initialize(Vector2 pos)
         {
-            transform.position = (Vector2) pos;
+            transform.position = pos;
+            SetHighlight(false);
+            SetStone(SquareType.Empty);
         }
 
         public void SetHighlight(bool isActive)
