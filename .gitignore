@@ -73,6 +73,8 @@ mono_crash.*
 *.DS_Store
 UserSettings/
 Assets/Plugins/
+Assets/Plugins.meta
 Assets/Resources/
+Assets/Resources.meta
 Assets/Audios/Clips/
 Assets/Audios/Clips.meta
