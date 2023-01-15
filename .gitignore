@@ -74,3 +74,5 @@ mono_crash.*
 UserSettings/
 Assets/Plugins/
 Assets/Resources/
+Assets/Audios/Clips/
+Assets/Audios/Clips.meta

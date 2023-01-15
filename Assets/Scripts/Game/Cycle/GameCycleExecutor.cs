@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Common;
 using Cysharp.Threading.Tasks;
 using Game.Background;
 using Game.Board;
@@ -108,6 +109,7 @@ namespace Game.Cycle
         private void Retry()
         {
             tokenSource?.Cancel();
+            SEPlayer.I.Play(SEPlayer.SEName.Retry);
             Execute();
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Common;
 using Cysharp.Threading.Tasks;
 using Game.Board.Square;
 using UnityEngine;
@@ -39,6 +40,7 @@ namespace Game.Board
                     squares[col, row] = square;
                 }
 
+                SEPlayer.I.Play(SEPlayer.SEName.CreateBoard);
                 await UniTask.Delay(40, cancellationToken: token);
             }
         }

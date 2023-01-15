@@ -73,6 +73,7 @@ namespace Game.Board.Square
             stoneSpriteRenderer.color = color;
             stoneSpriteRenderer.sortingOrder = 1;
             
+            SEPlayer.I.Play(SEPlayer.SEName.PutStone);
             await DOTween.Sequence()
                 .Append(stoneSpriteRenderer.DOFade(1, 0.2f))
                 .Join(stone.DOLocalMoveY(0, 0.2f))
@@ -91,6 +92,7 @@ namespace Game.Board.Square
             var reversedStoneType = currentStoneType == StoneType.Player ? StoneType.Enemy : StoneType.Player;
             stoneSpriteRenderer.sortingOrder = 1;
             
+            SEPlayer.I.Play(SEPlayer.SEName.ReverseStone);
             await DOTween.Sequence()
                 .Append(stone.DOLocalMoveY(0.4f, 0.08f).SetEase(Ease.InQuad))
                 .Append(stoneSpriteRenderer.transform.DORotate(Vector3.up * 90, 0.08f).SetEase(Ease.InQuart))

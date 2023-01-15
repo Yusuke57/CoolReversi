@@ -54,6 +54,9 @@ namespace Game.UI
             loseLabel.transform.position = (isPlayerWin ? enemyScoreText : playerScoreText).transform.position;
             winLabel.gameObject.SetActive(true);
             loseLabel.gameObject.SetActive(true);
+
+            var seName = isPlayerWin ? SEPlayer.SEName.Win : SEPlayer.SEName.Lose;
+            SEPlayer.I.Play(seName);
         }
     }
 }
