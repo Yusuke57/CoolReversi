@@ -30,6 +30,7 @@ namespace Game.Cycle
         public async UniTask PlayGame(CancellationToken token)
         {
             await (OnGamePhaseChanged?.Invoke(GamePhase.Initialize, token) ?? UniTask.CompletedTask);
+            await UniTask.Delay(800, cancellationToken: token);
             await (OnGamePhaseChanged?.Invoke(GamePhase.Play, token) ?? UniTask.CompletedTask);
 
             var turnCount = 0;

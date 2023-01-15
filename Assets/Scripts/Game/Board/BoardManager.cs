@@ -21,11 +21,6 @@ namespace Game.Board
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
 
-        private void Awake()
-        {
-            board = new Board(COL_COUNT, ROW_COUNT);
-        }
-
         public UniTask OnGamePhaseChanged(GameCycle.GamePhase phase, CancellationToken token)
         {
             return phase switch
@@ -48,6 +43,7 @@ namespace Game.Board
 
         private async UniTask Initialize(CancellationToken token)
         {
+            board = new Board(COL_COUNT, ROW_COUNT);
             await view.CreateBoard(board, token);
             
             // 初期配置

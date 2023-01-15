@@ -1,17 +1,14 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Board;
 using Game.Cycle;
 using UniRx;
 using UnityEngine;
 
 namespace Game.UI
 {
-    public class UIManager : MonoBehaviour, ISubscribeGamePhase, ISubscribeTurnPhase
+    public class UIManager : MonoBehaviour, ISubscribeGamePhase
     {
-        [SerializeField] private GameObject playerTurnObj;
-        [SerializeField] private GameObject enemyTurnObj;
         [SerializeField] private ScoreView scoreView;
 
         private IDisposable disposable;
@@ -22,21 +19,17 @@ namespace Game.UI
             disposable = onBoardChangedAsObservable
                 .Subscribe(ReloadScoreView)
                 .AddTo(this);
+            
+            scoreView.Initialize();
         }
         
         public UniTask OnGamePhaseChanged(GameCycle.GamePhase phase, CancellationToken token)
         {
-            return UniTask.CompletedTask;
-        }
-
-        public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, SquareType stoneType, CancellationToken token)
-        {
-            if (phase == GameCycle.TurnPhase.SelectSquare)
+            if (phase == GameCycle.GamePhase.Initialize)
             {
-                //playerTurnObj.SetActive(isPlayerTurn);
-                //enemyTurnObj.SetActive(!isPlayerTurn);
+                scoreView.SetScore(0, 0);
             }
-            
+
             return UniTask.CompletedTask;
         }
 

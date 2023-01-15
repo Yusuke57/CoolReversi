@@ -17,6 +17,11 @@ namespace Game.Board
 
         public async UniTask CreateBoard(Board board, CancellationToken token)
         {
+            for (var i = squareParent.childCount - 1; i >= 0; i--)
+            {
+                Destroy(squareParent.GetChild(i).gameObject);
+            }
+            
             var colCount = board.ColCount;
             var rowCount = board.RowCount;
             squares = new SquareView[colCount, rowCount];

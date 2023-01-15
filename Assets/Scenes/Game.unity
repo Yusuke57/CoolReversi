@@ -867,6 +867,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerScoreText: {fileID: 447555249}
   enemyScoreText: {fileID: 1487487654}
+  colorPalette: {fileID: 11400000, guid: cecec4bf7d29b4ebfb8e2a9cfea9c11e, type: 2}
 --- !u!1 &1403928814
 GameObject:
   m_ObjectHideFlags: 0
@@ -1231,6 +1232,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ce01d34cd4a4303b74852e35c53d91f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTurnObj: {fileID: 752043476}
-  enemyTurnObj: {fileID: 752043476}
   scoreView: {fileID: 1012799496}

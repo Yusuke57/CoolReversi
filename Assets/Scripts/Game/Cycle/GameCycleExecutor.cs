@@ -6,6 +6,8 @@ using Cysharp.Threading.Tasks;
 using Game.Background;
 using Game.Board;
 using Game.UI;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 
 namespace Game.Cycle
@@ -27,6 +29,7 @@ namespace Game.Cycle
         private void Start()
         {
             CacheInterfaces();
+            RegisterRetryAction();
             InitializeUI();
             Execute();
         }
@@ -49,6 +52,17 @@ namespace Game.Cycle
             finishGameChecker = finishGameCheckerObject.GetComponent<ICheckFinishGame>();
         }
 
+        private void RegisterRetryAction()
+        {
+            this.UpdateAsObservable()
+                .Where(_ => Input.GetKey(KeyCode.R))
+                .ThrottleFirst(TimeSpan.FromSeconds(1))
+                .Subscribe(_ =>
+                {
+                    Retry();
+                });
+        }
+
         private void InitializeUI()
         {
             uiManager.Initialize(boardManager.OnBoardChangedAsObservable);
@@ -66,7 +80,7 @@ namespace Game.Cycle
                 cycle.IsFinishedGame += () => finishGameChecker.IsFinishedGame();
                 cycle.PlayGame(tokenSource.Token).Forget();
             }
-            catch (Exception e)
+            catch
             {
                 // do nothing
             }
@@ -89,6 +103,12 @@ namespace Game.Cycle
                 .ToList();
 
             return UniTask.WhenAll(tasks);
+        }
+
+        private void Retry()
+        {
+            tokenSource?.Cancel();
+            Execute();
         }
     }
 }

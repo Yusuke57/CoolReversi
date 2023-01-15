@@ -66,7 +66,7 @@ namespace Game.Square
             stoneSpriteRenderer.gameObject.SetActive(true);
 
             // TODO: 仮
-            stoneSpriteRenderer.DOFade(0, 0);
+            stoneSpriteRenderer.color = new Color(1, 1, 1, 0);
             await DOTween.Sequence()
                 .Append(stoneSpriteRenderer.DOFade(1, 0.12f))
                 .ToUniTask(cancellationToken: token);
