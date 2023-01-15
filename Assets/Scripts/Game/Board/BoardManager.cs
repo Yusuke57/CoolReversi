@@ -89,7 +89,7 @@ namespace Game.Board
             else
             {
                 selectedPos = EnemyLogic.CalculateBestPutStonePos(board, StoneType.Enemy);
-                await UniTask.Delay(300, cancellationToken: token);
+                await UniTask.Delay(600, cancellationToken: token);
             }
         }
 

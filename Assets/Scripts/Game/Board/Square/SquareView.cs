@@ -3,11 +3,10 @@ using System.Threading;
 using Common;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Game.Board;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Game.Square
+namespace Game.Board.Square
 {
     public class SquareView : MonoBehaviour, IPointerClickHandler
     {
@@ -78,7 +77,7 @@ namespace Game.Square
                 .Append(stoneSpriteRenderer.DOFade(1, 0.2f))
                 .Join(stone.DOLocalMoveY(0, 0.2f))
                 .SetLink(stone.gameObject)
-                .ToUniTask(cancellationToken: token);
+                .ToUniTask(tweenCancelBehaviour: TweenCancelBehaviour.Complete, cancellationToken: token);
             stoneSpriteRenderer.sortingOrder = 0;
         }
 
@@ -99,7 +98,7 @@ namespace Game.Square
                 .Append(stoneSpriteRenderer.transform.DORotate(Vector3.up * 0, 0.08f))
                 .Append(stone.DOLocalMoveY(0, 0.08f))
                 .SetLink(stone.gameObject)
-                .ToUniTask(cancellationToken: token);
+                .ToUniTask(tweenCancelBehaviour: TweenCancelBehaviour.Complete, cancellationToken: token);
             
             stoneSpriteRenderer.sortingOrder = 0;
             currentStoneType = reversedStoneType;

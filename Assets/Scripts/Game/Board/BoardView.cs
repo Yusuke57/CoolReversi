@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Square;
+using Game.Board.Square;
 using UnityEngine;
 
 namespace Game.Board
