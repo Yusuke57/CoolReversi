@@ -11,6 +11,7 @@ namespace Game.Square
 {
     public class SquareView : MonoBehaviour, IPointerClickHandler
     {
+        [SerializeField] private Transform stone;
         [SerializeField] private SpriteRenderer stoneSpriteRenderer;
         [SerializeField] private SpriteRenderer highlightSpriteRenderer;
         [SerializeField] private ColorPalette colorPalette;
@@ -28,6 +29,7 @@ namespace Game.Square
             transform.position = pos;
             onClickAction = onClick;
             
+            stoneSpriteRenderer.sortingOrder = 0;
             SetHighlight(false);
             SetEmpty();
         }
@@ -66,13 +68,18 @@ namespace Game.Square
             SetStoneColor(type);
             stoneSpriteRenderer.gameObject.SetActive(true);
 
-            // TODO: 仮
+            stone.localPosition = Vector3.up;
             var color = stoneSpriteRenderer.color;
             color.a = 0;
             stoneSpriteRenderer.color = color;
+            stoneSpriteRenderer.sortingOrder = 1;
+            
             await DOTween.Sequence()
-                .Append(stoneSpriteRenderer.DOFade(1, 0.12f))
+                .Append(stoneSpriteRenderer.DOFade(1, 0.2f))
+                .Join(stone.DOLocalMoveY(0, 0.2f))
+                .SetLink(stone.gameObject)
                 .ToUniTask(cancellationToken: token);
+            stoneSpriteRenderer.sortingOrder = 0;
         }
 
         public async UniTask ReverseStone(CancellationToken token)
@@ -83,14 +90,18 @@ namespace Game.Square
             }
 
             var reversedStoneType = currentStoneType == StoneType.Player ? StoneType.Enemy : StoneType.Player;
-
-            // TODO: 仮
+            stoneSpriteRenderer.sortingOrder = 1;
+            
             await DOTween.Sequence()
-                .Append(stoneSpriteRenderer.transform.DORotate(Vector3.up * 90, 0.08f))
+                .Append(stone.DOLocalMoveY(0.4f, 0.08f).SetEase(Ease.InQuad))
+                .Append(stoneSpriteRenderer.transform.DORotate(Vector3.up * 90, 0.08f).SetEase(Ease.InQuart))
                 .AppendCallback(() => SetStoneColor(reversedStoneType))
                 .Append(stoneSpriteRenderer.transform.DORotate(Vector3.up * 0, 0.08f))
+                .Append(stone.DOLocalMoveY(0, 0.08f))
+                .SetLink(stone.gameObject)
                 .ToUniTask(cancellationToken: token);
-
+            
+            stoneSpriteRenderer.sortingOrder = 0;
             currentStoneType = reversedStoneType;
         }
     }
