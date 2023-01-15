@@ -47,9 +47,9 @@ namespace Game.UI
 
         private void ReloadScoreView(Board.Board board)
         {
+            scoreView.SetScore(currentPlayerScore, currentEnemyScore, board.PlayerStoneCount, board.EnemyStoneCount);
             currentPlayerScore = board.PlayerStoneCount;
             currentEnemyScore = board.EnemyStoneCount;
-            scoreView.SetScore(currentPlayerScore, currentEnemyScore);
         }
     }
 }
