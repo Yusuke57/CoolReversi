@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Cycle;
+using UniRx;
 using UnityEngine;
 
 namespace Game.Board
@@ -13,7 +14,10 @@ namespace Game.Board
         [SerializeField] private BoardView view;
         
         private Board board;
-        
+
+        private readonly Subject<Board> onBoardChangedSubject = new();
+        public IObservable<Board> OnBoardChangedAsObservable => onBoardChangedSubject;
+
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
 
@@ -58,6 +62,7 @@ namespace Game.Board
             foreach (var (pos, type) in firstStones)
             {
                 board.SetStone(type, pos);
+                onBoardChangedSubject.OnNext(board);
                 await view.PutStone(type, pos, token);
             }
         }
@@ -79,11 +84,9 @@ namespace Game.Board
                 return;
             }
             
-            // データ更新
             var selectedPos = view.SelectedPos.Value;
             board.SetStone(stoneType, selectedPos);
-            
-            // 表示更新
+            onBoardChangedSubject.OnNext(board);
             await view.PutStone(stoneType, selectedPos, token);
         }
 
@@ -94,15 +97,9 @@ namespace Game.Board
                 return;
             }
 
-            // データ更新
             var selectedPos = view.SelectedPos.Value;
             var reversePoses = board.GetReversePoses(stoneType, selectedPos);
-            foreach (var reversePos in reversePoses.SelectMany(pos => pos))
-            {
-                board.SetStone(stoneType, reversePos);
-            }
             
-            // 表示更新
             var reverseAnimPosGroups = Enumerable.Range(0, reversePoses.Max(c => c.Count))
                 .Select(i => reversePoses.Select(c => i < c.Count ? c[i] : (Vector2Int?) null));
             foreach (var animPosGroup in reverseAnimPosGroups)
@@ -113,10 +110,12 @@ namespace Game.Board
                     {
                         continue;
                     }
+                    board.SetStone(stoneType, animPos.Value);
                     view.ReverseStone(animPos.Value, token).Forget();
+                    onBoardChangedSubject.OnNext(board);
                 }
 
-                await UniTask.Delay(100, cancellationToken: token);
+                await UniTask.Delay(30, cancellationToken: token);
             }
         }
 

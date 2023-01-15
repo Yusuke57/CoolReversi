@@ -1,17 +1,22 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Board;
+using Game.UI;
 using UnityEngine;
 
 namespace Game.Cycle
 {
     public class GameCycleExecutor : MonoBehaviour
     {
-        [SerializeField] private GameObject[] subscribeObjects;
+        [SerializeField] private BoardManager boardManager;
+        [SerializeField] private UIManager uiManager;
         [SerializeField] private GameObject finishGameCheckerObject;
-        private ISubscribeGamePhase[] gamePhaseSubscribers;
-        private ISubscribeTurnPhase[] turnPhaseSubscribers;
+        
+        private List<ISubscribeGamePhase> gamePhaseSubscribers;
+        private List<ISubscribeTurnPhase> turnPhaseSubscribers;
         private ICheckFinishGame finishGameChecker;
         
         private GameCycle cycle;
@@ -20,22 +25,29 @@ namespace Game.Cycle
         private void Start()
         {
             CacheInterfaces();
+            InitializeUI();
             Execute();
         }
 
         private void CacheInterfaces()
         {
-            gamePhaseSubscribers = subscribeObjects
-                .Select(obj => obj.GetComponent<ISubscribeGamePhase>())
-                .Where(component => component != null)
-                .ToArray();
+            gamePhaseSubscribers = new List<ISubscribeGamePhase>
+            {
+                boardManager.GetComponent<ISubscribeGamePhase>(),
+                uiManager.GetComponent<ISubscribeGamePhase>()
+            };
             
-            turnPhaseSubscribers = subscribeObjects
-                .Select(obj => obj.GetComponent<ISubscribeTurnPhase>())
-                .Where(component => component != null)
-                .ToArray();
-
+            turnPhaseSubscribers = new List<ISubscribeTurnPhase>
+            {
+                boardManager.GetComponent<ISubscribeTurnPhase>()
+            };
+            
             finishGameChecker = finishGameCheckerObject.GetComponent<ICheckFinishGame>();
+        }
+
+        private void InitializeUI()
+        {
+            uiManager.Initialize(boardManager.OnBoardChangedAsObservable);
         }
 
         private void Execute()

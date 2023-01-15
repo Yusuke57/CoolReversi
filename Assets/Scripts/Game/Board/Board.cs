@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Game.Board
@@ -17,6 +17,9 @@ namespace Game.Board
         
         public SquareType PlayerStoneType = SquareType.Black;
         public SquareType EnemyStoneType = SquareType.White;
+
+        public int PlayerStoneCount => squareTypes.Cast<SquareType>().Count(type => type == PlayerStoneType);
+        public int EnemyStoneCount => squareTypes.Cast<SquareType>().Count(type => type == EnemyStoneType);
 
         public SquareType? GetSquareType(Vector2Int pos)
         {
