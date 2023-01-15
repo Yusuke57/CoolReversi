@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Board;
 using Game.Cycle;
 using UniRx;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace Game.UI
             return UniTask.CompletedTask;
         }
 
-        public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, bool isPlayerTurn, CancellationToken token)
+        public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, SquareType stoneType, CancellationToken token)
         {
             if (phase == GameCycle.TurnPhase.SelectSquare)
             {

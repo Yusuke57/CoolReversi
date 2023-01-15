@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Background;
 using Game.Board;
 using Game.UI;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Game.Cycle
     {
         [SerializeField] private BoardManager boardManager;
         [SerializeField] private UIManager uiManager;
+        [SerializeField] private BackgroundManager backgroundManager;
         [SerializeField] private GameObject finishGameCheckerObject;
         
         private List<ISubscribeGamePhase> gamePhaseSubscribers;
@@ -34,12 +36,14 @@ namespace Game.Cycle
             gamePhaseSubscribers = new List<ISubscribeGamePhase>
             {
                 boardManager.GetComponent<ISubscribeGamePhase>(),
-                uiManager.GetComponent<ISubscribeGamePhase>()
+                uiManager.GetComponent<ISubscribeGamePhase>(),
+                backgroundManager.GetComponent<ISubscribeGamePhase>()
             };
             
             turnPhaseSubscribers = new List<ISubscribeTurnPhase>
             {
-                boardManager.GetComponent<ISubscribeTurnPhase>()
+                boardManager.GetComponent<ISubscribeTurnPhase>(),
+                backgroundManager.GetComponent<ISubscribeTurnPhase>()
             };
             
             finishGameChecker = finishGameCheckerObject.GetComponent<ICheckFinishGame>();
@@ -79,8 +83,9 @@ namespace Game.Cycle
 
         private UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, bool isPlayerTurn, CancellationToken token)
         {
+            var stoneType = isPlayerTurn ? SquareType.Black : SquareType.White;
             var tasks = turnPhaseSubscribers
-                .Select(subscriber => subscriber.OnTurnPhaseChanged(phase, isPlayerTurn, token))
+                .Select(subscriber => subscriber.OnTurnPhaseChanged(phase, stoneType, token))
                 .ToList();
 
             return UniTask.WhenAll(tasks);

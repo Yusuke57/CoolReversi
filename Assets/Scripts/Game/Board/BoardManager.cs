@@ -35,9 +35,8 @@ namespace Game.Board
             };
         }
 
-        public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, bool isPlayerTurn, CancellationToken token)
+        public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, SquareType stoneType, CancellationToken token)
         {
-            var stoneType = isPlayerTurn ? board.PlayerStoneType : board.EnemyStoneType;
             return phase switch
             {
                 GameCycle.TurnPhase.SelectSquare => WaitForSelectSquare(stoneType, token),
@@ -62,8 +61,8 @@ namespace Game.Board
             foreach (var (pos, type) in firstStones)
             {
                 board.SetStone(type, pos);
-                onBoardChangedSubject.OnNext(board);
                 await view.PutStone(type, pos, token);
+                onBoardChangedSubject.OnNext(board);
             }
         }
 
@@ -86,8 +85,8 @@ namespace Game.Board
             
             var selectedPos = view.SelectedPos.Value;
             board.SetStone(stoneType, selectedPos);
-            onBoardChangedSubject.OnNext(board);
             await view.PutStone(stoneType, selectedPos, token);
+            onBoardChangedSubject.OnNext(board);
         }
 
         private async UniTask ReverseStones(SquareType stoneType, CancellationToken token)
@@ -100,6 +99,7 @@ namespace Game.Board
             var selectedPos = view.SelectedPos.Value;
             var reversePoses = board.GetReversePoses(stoneType, selectedPos);
             
+            var tasks = new List<UniTask>();
             var reverseAnimPosGroups = Enumerable.Range(0, reversePoses.Max(c => c.Count))
                 .Select(i => reversePoses.Select(c => i < c.Count ? c[i] : (Vector2Int?) null));
             foreach (var animPosGroup in reverseAnimPosGroups)
@@ -110,13 +110,21 @@ namespace Game.Board
                     {
                         continue;
                     }
-                    board.SetStone(stoneType, animPos.Value);
-                    view.ReverseStone(animPos.Value, token).Forget();
-                    onBoardChangedSubject.OnNext(board);
+
+                    tasks.Add(ReverseStone(stoneType, animPos.Value, token));
                 }
 
-                await UniTask.Delay(30, cancellationToken: token);
+                await UniTask.Delay(100, cancellationToken: token);
             }
+
+            await UniTask.WhenAll(tasks);
+        }
+
+        private async UniTask ReverseStone(SquareType stoneType, Vector2Int pos, CancellationToken token)
+        {
+            board.SetStone(stoneType, pos);
+            await view.ReverseStone(pos, token);
+            onBoardChangedSubject.OnNext(board);
         }
 
         public bool IsFinishedGame()

@@ -51,7 +51,9 @@ namespace Game.Cycle
         {
             await (OnTurnPhaseChanged?.Invoke(TurnPhase.SelectSquare, isPlayerTurn, token) ?? UniTask.CompletedTask);
             await (OnTurnPhaseChanged?.Invoke(TurnPhase.PutStone, isPlayerTurn, token) ?? UniTask.CompletedTask);
+            await UniTask.Delay(200, cancellationToken: token);
             await (OnTurnPhaseChanged?.Invoke(TurnPhase.ReverseStones, isPlayerTurn, token) ?? UniTask.CompletedTask);
+            await UniTask.Delay(400, cancellationToken: token);
         }
     }
 }
