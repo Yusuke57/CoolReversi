@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Board.Enemy;
 using Game.Cycle;
 using UniRx;
 using UnityEngine;
@@ -40,7 +41,7 @@ namespace Game.Board
         {
             return phase switch
             {
-                GameCycle.TurnPhase.SelectSquare => WaitForSelectSquare(stoneType, token),
+                GameCycle.TurnPhase.SelectSquare => SelectSquare(stoneType, token),
                 GameCycle.TurnPhase.PutStone => PutStone(stoneType, token),
                 GameCycle.TurnPhase.ReverseStones => ReverseStones(stoneType, token),
                 _ => UniTask.CompletedTask
@@ -68,7 +69,7 @@ namespace Game.Board
             }
         }
 
-        private async UniTask WaitForSelectSquare(StoneType stoneType, CancellationToken token)
+        private async UniTask SelectSquare(StoneType stoneType, CancellationToken token)
         {
             selectedPos = null;
             var canPutPoses = board.GetCanPutPoses(stoneType);
@@ -78,11 +79,18 @@ namespace Game.Board
             {
                 return;
             }
-            
-            view.SetSquareHighlights(canPutPoses);
-            
-            await UniTask.WaitUntil(() => selectedPos.HasValue, cancellationToken: token);
-            view.SetSquareHighlights(new List<Vector2Int>());
+
+            if (stoneType == StoneType.Player)
+            {
+                view.SetSquareHighlights(canPutPoses);
+                await UniTask.WaitUntil(() => selectedPos.HasValue, cancellationToken: token);
+                view.SetSquareHighlights(new List<Vector2Int>());
+            }
+            else
+            {
+                selectedPos = EnemyLogic.CalculateBestPutStonePos(board, StoneType.Enemy);
+                await UniTask.Delay(300, cancellationToken: token);
+            }
         }
 
         private async UniTask PutStone(StoneType stoneType, CancellationToken token)
