@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace Game.Board
 
         private SquareView[,] squares;
         
-        public Vector2Int? SelectedPos { get; private set; } = null;
+        public Action<Vector2Int> OnSelected { private get; set; }
 
         public async UniTask CreateBoard(Board board, CancellationToken token)
         {
@@ -34,7 +35,7 @@ namespace Game.Board
                     var pos = new Vector2Int(col, row);
                     var worldPos = pos + offset;
                     var square = Instantiate(squarePrefab, squareParent);
-                    square.Initialize(worldPos, () => SelectedPos = pos);
+                    square.Initialize(worldPos, () => OnSelected?.Invoke(pos));
                     squares[col, row] = square;
                 }
 
@@ -52,11 +53,6 @@ namespace Game.Board
                     squares[col, row].SetHighlight(highlightPoses.Contains(pos));
                 }
             }
-        }
-
-        public void ResetSelectedPos()
-        {
-            SelectedPos = null;
         }
 
         public async UniTask PutStone(StoneType stoneType, Vector2Int pos, CancellationToken token)

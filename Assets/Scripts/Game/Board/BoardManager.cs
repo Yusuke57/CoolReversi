@@ -14,12 +14,18 @@ namespace Game.Board
         [SerializeField] private BoardView view;
         
         private Board board;
+        private Vector2Int? selectedPos;
 
         private readonly Subject<Board> onBoardChangedSubject = new();
         public IObservable<Board> OnBoardChangedAsObservable => onBoardChangedSubject;
 
         private const int ROW_COUNT = 8;
         private const int COL_COUNT = 8;
+
+        private void Awake()
+        {
+            view.OnSelected = pos => selectedPos = pos;
+        }
 
         public UniTask OnGamePhaseChanged(GameCycle.GamePhase phase, CancellationToken token)
         {
@@ -45,7 +51,7 @@ namespace Game.Board
         {
             board = new Board(COL_COUNT, ROW_COUNT);
             await view.CreateBoard(board, token);
-            
+
             // 初期配置
             var firstStones = new Dictionary<Vector2Int, StoneType>
             {
@@ -64,36 +70,41 @@ namespace Game.Board
 
         private async UniTask WaitForSelectSquare(StoneType stoneType, CancellationToken token)
         {
+            selectedPos = null;
             var canPutPoses = board.GetCanPutPoses(stoneType);
+            
+            // 石を置ける箇所がないとき
+            if (!canPutPoses.Any())
+            {
+                return;
+            }
+            
             view.SetSquareHighlights(canPutPoses);
-
-            view.ResetSelectedPos();
-            await UniTask.WaitUntil(() => view.SelectedPos.HasValue, cancellationToken: token);
+            
+            await UniTask.WaitUntil(() => selectedPos.HasValue, cancellationToken: token);
             view.SetSquareHighlights(new List<Vector2Int>());
         }
 
         private async UniTask PutStone(StoneType stoneType, CancellationToken token)
         {
-            if (!view.SelectedPos.HasValue)
+            if (!selectedPos.HasValue)
             {
                 return;
             }
             
-            var selectedPos = view.SelectedPos.Value;
-            board.SetStone(stoneType, selectedPos);
-            await view.PutStone(stoneType, selectedPos, token);
+            board.SetStone(stoneType, selectedPos.Value);
+            await view.PutStone(stoneType, selectedPos.Value, token);
             onBoardChangedSubject.OnNext(board);
         }
 
         private async UniTask ReverseStones(StoneType stoneType, CancellationToken token)
         {
-            if (!view.SelectedPos.HasValue)
+            if (!selectedPos.HasValue)
             {
                 return;
             }
 
-            var selectedPos = view.SelectedPos.Value;
-            var reversePoses = board.GetReversePoses(stoneType, selectedPos);
+            var reversePoses = board.GetReversePoses(stoneType, selectedPos.Value);
             
             var tasks = new List<UniTask>();
             var reverseAnimPosGroups = Enumerable.Range(0, reversePoses.Max(c => c.Count))
