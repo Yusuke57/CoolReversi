@@ -12,8 +12,8 @@ namespace Game.UI
 
         public void Initialize()
         {
-            playerScoreText.color = colorPalette.blackColor;
-            enemyScoreText.color = colorPalette.whiteColor;
+            playerScoreText.color = colorPalette.playerStoneColor;
+            enemyScoreText.color = colorPalette.enemyStoneColor;
         }
 
         public void SetScore(int playerScore, int enemyScore)

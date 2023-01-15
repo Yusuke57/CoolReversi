@@ -97,7 +97,7 @@ namespace Game.Cycle
 
         private UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, bool isPlayerTurn, CancellationToken token)
         {
-            var stoneType = isPlayerTurn ? SquareType.Black : SquareType.White;
+            var stoneType = isPlayerTurn ? StoneType.Player : StoneType.Enemy;
             var tasks = turnPhaseSubscribers
                 .Select(subscriber => subscriber.OnTurnPhaseChanged(phase, stoneType, token))
                 .ToList();

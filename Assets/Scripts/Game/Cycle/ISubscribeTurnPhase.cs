@@ -6,6 +6,6 @@ namespace Game.Cycle
 {
     public interface ISubscribeTurnPhase
     {
-        public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, SquareType stoneType, CancellationToken token);
+        public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, StoneType stoneType, CancellationToken token);
     }
 }

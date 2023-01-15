@@ -59,7 +59,7 @@ namespace Game.Board
             SelectedPos = null;
         }
 
-        public async UniTask PutStone(SquareType stoneType, Vector2Int pos, CancellationToken token)
+        public async UniTask PutStone(StoneType stoneType, Vector2Int pos, CancellationToken token)
         {
             await squares[pos.x, pos.y].PutStone(stoneType, token);
         }

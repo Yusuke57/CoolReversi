@@ -25,8 +25,8 @@ namespace Game.Board
             {
                 for (var col = 0; col < board.ColCount; col++)
                 {
-                    var type = board.GetSquareType(new Vector2Int(col, row));
-                    if (type == SquareType.Empty)
+                    var type = board.GetStoneType(new Vector2Int(col, row));
+                    if (type == StoneType.Empty)
                     {
                         hasEmpty = true;
                         break;
@@ -38,7 +38,7 @@ namespace Game.Board
             return !hasEmpty;
         }
 
-        public static List<Vector2Int> GetCanPutPoses(this Board board, SquareType stoneType)
+        public static List<Vector2Int> GetCanPutPoses(this Board board, StoneType stoneType)
         {
             var canPutPoses = new List<Vector2Int>();
             for (var row = 0; row < board.RowCount; row++)
@@ -57,7 +57,7 @@ namespace Game.Board
             return canPutPoses;
         }
 
-        public static List<List<Vector2Int>> GetReversePoses(this Board board, SquareType stoneType, Vector2Int putPos)
+        public static List<List<Vector2Int>> GetReversePoses(this Board board, StoneType stoneType, Vector2Int putPos)
         {
             return directions
                 .Select(direction => board.GetReversePoses(stoneType, putPos, direction))
@@ -65,9 +65,9 @@ namespace Game.Board
                 .ToList();
         }
         
-        private static List<Vector2Int> GetReversePoses(this Board board, SquareType stoneType, Vector2Int putPos, Vector2Int direction)
+        private static List<Vector2Int> GetReversePoses(this Board board, StoneType stoneType, Vector2Int putPos, Vector2Int direction)
         {
-            if (stoneType == SquareType.Empty)
+            if (stoneType == StoneType.Empty)
             {
                 Debug.LogError("putType is Empty");
                 return new List<Vector2Int>();
@@ -78,8 +78,8 @@ namespace Game.Board
             while (true)
             {
                 targetPos += direction;
-                var targetType = board.GetSquareType(targetPos);
-                if (targetType is null or SquareType.Empty)
+                var targetType = board.GetStoneType(targetPos);
+                if (targetType is null or StoneType.Empty)
                 {
                     reversePoses.Clear();
                     break;

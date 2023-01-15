@@ -30,7 +30,7 @@ namespace Game.Board
             };
         }
 
-        public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, SquareType stoneType, CancellationToken token)
+        public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, StoneType stoneType, CancellationToken token)
         {
             return phase switch
             {
@@ -47,12 +47,12 @@ namespace Game.Board
             await view.CreateBoard(board, token);
             
             // 初期配置
-            var firstStones = new Dictionary<Vector2Int, SquareType>
+            var firstStones = new Dictionary<Vector2Int, StoneType>
             {
-                { new Vector2Int(COL_COUNT / 2 - 1, ROW_COUNT / 2 - 1), SquareType.White },
-                { new Vector2Int(COL_COUNT / 2, ROW_COUNT / 2 - 1), SquareType.Black },
-                { new Vector2Int(COL_COUNT / 2 - 1, ROW_COUNT / 2), SquareType.Black },
-                { new Vector2Int(COL_COUNT / 2, ROW_COUNT / 2), SquareType.White }
+                { new Vector2Int(COL_COUNT / 2 - 1, ROW_COUNT / 2 - 1), StoneType.Enemy },
+                { new Vector2Int(COL_COUNT / 2, ROW_COUNT / 2 - 1), StoneType.Player },
+                { new Vector2Int(COL_COUNT / 2 - 1, ROW_COUNT / 2), StoneType.Player },
+                { new Vector2Int(COL_COUNT / 2, ROW_COUNT / 2), StoneType.Enemy }
             };
             foreach (var (pos, type) in firstStones)
             {
@@ -62,7 +62,7 @@ namespace Game.Board
             }
         }
 
-        private async UniTask WaitForSelectSquare(SquareType stoneType, CancellationToken token)
+        private async UniTask WaitForSelectSquare(StoneType stoneType, CancellationToken token)
         {
             var canPutPoses = board.GetCanPutPoses(stoneType);
             view.SetSquareHighlights(canPutPoses);
@@ -72,7 +72,7 @@ namespace Game.Board
             view.SetSquareHighlights(new List<Vector2Int>());
         }
 
-        private async UniTask PutStone(SquareType stoneType, CancellationToken token)
+        private async UniTask PutStone(StoneType stoneType, CancellationToken token)
         {
             if (!view.SelectedPos.HasValue)
             {
@@ -85,7 +85,7 @@ namespace Game.Board
             onBoardChangedSubject.OnNext(board);
         }
 
-        private async UniTask ReverseStones(SquareType stoneType, CancellationToken token)
+        private async UniTask ReverseStones(StoneType stoneType, CancellationToken token)
         {
             if (!view.SelectedPos.HasValue)
             {
@@ -116,7 +116,7 @@ namespace Game.Board
             await UniTask.WhenAll(tasks);
         }
 
-        private async UniTask ReverseStone(SquareType stoneType, Vector2Int pos, CancellationToken token)
+        private async UniTask ReverseStone(StoneType stoneType, Vector2Int pos, CancellationToken token)
         {
             board.SetStone(stoneType, pos);
             await view.ReverseStone(pos, token);

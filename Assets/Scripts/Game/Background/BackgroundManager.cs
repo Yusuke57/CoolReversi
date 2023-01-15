@@ -18,7 +18,7 @@ namespace Game.Background
             return UniTask.CompletedTask;
         }
 
-        public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, SquareType stoneType, CancellationToken token)
+        public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, StoneType stoneType, CancellationToken token)
         {
             turnColorSpriteRenderer.color = colorPalette.GetStoneColor(stoneType);
             turnColorSpriteRenderer.gameObject.SetActive(true);
