@@ -125,7 +125,15 @@ namespace Game.Board
 
         public bool IsFinishedGame()
         {
-            return board?.IsFinishedGame() ?? false;
+            // 空きマスがなくなったら終了
+            if (!board.HasEmpty())
+            {
+                return true;
+            }
+            
+            // 両者とも置けなくなったら終了
+            var cantPutStone = !board.GetCanPutPoses(StoneType.Player).Any() && !board.GetCanPutPoses(StoneType.Enemy).Any();
+            return cantPutStone;
         }
     }
 }

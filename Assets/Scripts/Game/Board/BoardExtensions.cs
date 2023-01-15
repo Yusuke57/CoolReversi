@@ -18,9 +18,8 @@ namespace Game.Board
             new Vector2Int(1, -1)
         };
 
-        public static bool IsFinishedGame(this Board board)
+        public static bool HasEmpty(this Board board)
         {
-            var hasEmpty = false;
             for (var row = 0; row < board.RowCount; row++)
             {
                 for (var col = 0; col < board.ColCount; col++)
@@ -28,14 +27,12 @@ namespace Game.Board
                     var type = board.GetStoneType(new Vector2Int(col, row));
                     if (type == StoneType.Empty)
                     {
-                        hasEmpty = true;
-                        break;
+                        return true;
                     }
                 }
             }
 
-            // TODO: 両者石を置けなくなったときもfinish判定する
-            return !hasEmpty;
+            return false;
         }
 
         public static List<Vector2Int> GetCanPutPoses(this Board board, StoneType stoneType)
