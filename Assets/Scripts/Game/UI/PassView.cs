@@ -22,7 +22,7 @@ namespace Game.UI
                 .AppendInterval(0.8f)
                 .AppendCallback(() => content.SetActive(false))
                 .Append(background.DOScaleY(0, 0.12f))
-                .ToUniTask(cancellationToken: token);
+                .ToUniTask(TweenCancelBehaviour.Complete, token);
 
             gameObject.SetActive(false);
         }

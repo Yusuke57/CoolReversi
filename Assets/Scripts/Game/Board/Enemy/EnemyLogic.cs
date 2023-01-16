@@ -24,7 +24,7 @@ namespace Game.Board.Enemy
         {
             return cellEvaluations[pos.x, pos.y];
         }
-
+        
         public static async UniTask<Vector2Int> CalculatePutStonePos
             (Board board, StoneType stoneType, EnemyLevel level, CancellationToken token)
         {
@@ -59,7 +59,7 @@ namespace Game.Board.Enemy
                     opponentTurn.pos = firstPos;
                     calculatedOpponentTurnCandidates.Add(opponentTurn);
                     
-                    await UniTask.NextFrame(token);
+                    //await UniTask.NextFrame(token);
                 }
                 
                 var isMyTurnCandidatesCleared = false;
@@ -80,9 +80,10 @@ namespace Game.Board.Enemy
                             .Select(info => (info.reversedBoard, firstPos, info.evaluation)));
                     }
                     
-                    await UniTask.NextFrame(token);
+                    //await UniTask.NextFrame(token);
                 }
             }
+            await UniTask.NextFrame(token);
 
             // 最終的に一番評価値が高かった盤面の、最初の一手を返す
             var bestFirstPos = calculatedMyTurnCandidates

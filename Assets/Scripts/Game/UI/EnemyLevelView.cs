@@ -1,4 +1,5 @@
 using System;
+using Common;
 using Game.Board.Enemy;
 using UniRx;
 using UnityEngine;
@@ -17,7 +18,11 @@ namespace Game.UI
             foreach (var buttonGroup in buttonGroups)
             {
                 buttonGroup.button.OnClickAsObservable()
-                    .Subscribe(_ => OnLevelClicked?.Invoke(buttonGroup.level))
+                    .Subscribe(_ =>
+                    {
+                        SEPlayer.I.Play(SEPlayer.SEName.Button);
+                        OnLevelClicked?.Invoke(buttonGroup.level);
+                    })
                     .AddTo(buttonGroup.button);
             }
         }

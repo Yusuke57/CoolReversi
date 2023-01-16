@@ -38,7 +38,7 @@ namespace Common
             Win = 500,
             Lose = 510,
             
-            Retry = 600,
+            Button = 1000,
         }
         
         [Serializable]

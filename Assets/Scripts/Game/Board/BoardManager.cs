@@ -82,20 +82,32 @@ namespace Game.Board
 
             if (stoneType == StoneType.Player)
             {
-                view.SetSquareHighlights(canPutPoses);
-                await UniTask.WaitUntil(() => selectedPos.HasValue, cancellationToken: token);
-                view.SetSquareHighlights(new List<Vector2Int>());
+                await SelectSquareForPlayer(canPutPoses, token);
             }
             else if(stoneType == StoneType.Enemy)
             {
-                const int delayMsec = 500;
-                var preTime = DateTime.Now;
-                selectedPos = await EnemyLogic.CalculatePutStonePos
-                    (board, StoneType.Enemy, EnemyLevelSetting.CurrentEnemyLevel, token);
-                var diffTime = DateTime.Now - preTime;
-                var additiveDelayMsec = Mathf.Max(0, delayMsec - (int) diffTime.TotalMilliseconds);
-                await UniTask.Delay(additiveDelayMsec, cancellationToken: token);
+                await SelectSquareForEnemy(token);
             }
+        }
+
+        private async UniTask SelectSquareForPlayer(List<Vector2Int> canPutPoses, CancellationToken token)
+        {
+            view.SetSquareHighlights(canPutPoses);
+            await UniTask.WaitUntil(() => selectedPos.HasValue, cancellationToken: token);
+            view.SetSquareHighlights(new List<Vector2Int>());
+        }
+
+        private async UniTask SelectSquareForEnemy(CancellationToken token)
+        {
+            const int delayMsec = 500;
+            var preTime = DateTime.Now;
+            var currentEnemyLevel = EnemyLevelSetting.CurrentEnemyLevel;
+            
+            selectedPos = await EnemyLogic.CalculatePutStonePos(board, StoneType.Enemy, currentEnemyLevel, token);
+                
+            var diffTime = DateTime.Now - preTime;
+            var additiveDelayMsec = Mathf.Max(0, delayMsec - (int) diffTime.TotalMilliseconds);
+            await UniTask.Delay(additiveDelayMsec, cancellationToken: token);
         }
 
         private async UniTask PutStone(StoneType stoneType, CancellationToken token)

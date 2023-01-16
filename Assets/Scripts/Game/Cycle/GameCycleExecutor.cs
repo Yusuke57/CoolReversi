@@ -31,7 +31,7 @@ namespace Game.Cycle
         {
             CacheInterfaces();
             RegisterRetryAction();
-            InitializeUI();
+            RegisterEvent();
             Execute();
         }
 
@@ -65,7 +65,7 @@ namespace Game.Cycle
                 });
         }
 
-        private void InitializeUI()
+        private void RegisterEvent()
         {
             boardManager.OnBoardChangedAsObservable
                 .Subscribe(board => uiManager.OnBoardChanged(board))
@@ -112,7 +112,7 @@ namespace Game.Cycle
         private void Retry()
         {
             tokenSource?.Cancel();
-            SEPlayer.I.Play(SEPlayer.SEName.Retry);
+            SEPlayer.I.Play(SEPlayer.SEName.Button);
             Execute();
         }
     }

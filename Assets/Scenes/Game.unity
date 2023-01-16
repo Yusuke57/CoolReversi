@@ -1395,22 +1395,22 @@ MonoBehaviour:
   clipDataList:
   - name: 10
     clip: {fileID: 8300000, guid: d37763f91a4f24697837bddfb4d6a80e, type: 3}
-    volume: 1
+    volume: 0.8
   - name: 100
     clip: {fileID: 8300000, guid: 695d2157843694189a37d5cf0050128e, type: 3}
-    volume: 0.8
+    volume: 0.6
   - name: 110
     clip: {fileID: 8300000, guid: 484a058e2b85e4d9a97cf2ede43b55ef, type: 3}
-    volume: 0.8
+    volume: 0.6
   - name: 500
     clip: {fileID: 8300000, guid: 166b0107ada634acb9cf7eda6437315c, type: 3}
-    volume: 0.5
+    volume: 0.36
   - name: 510
     clip: {fileID: 8300000, guid: d9fd08a83e4434059a995d1da2036edf, type: 3}
-    volume: 0.8
-  - name: 600
+    volume: 1
+  - name: 1000
     clip: {fileID: 8300000, guid: fdf49ea40467548f09138a67b41a15f2, type: 3}
-    volume: 0.9
+    volume: 1
 --- !u!82 &680885264
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3134,7 +3134,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1403928814}
   m_LocalRotation: {x: 0, y: 0, z: 0.08715578, w: 0.9961947}
-  m_LocalPosition: {x: -7, y: -4, z: 0}
+  m_LocalPosition: {x: -7.45, y: -4, z: 0}
   m_LocalScale: {x: 20, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

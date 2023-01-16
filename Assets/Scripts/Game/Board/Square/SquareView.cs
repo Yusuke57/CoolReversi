@@ -78,7 +78,7 @@ namespace Game.Board.Square
                 .Append(stoneSpriteRenderer.DOFade(1, 0.2f))
                 .Join(stone.DOLocalMoveY(0, 0.2f))
                 .SetLink(stone.gameObject)
-                .ToUniTask(tweenCancelBehaviour: TweenCancelBehaviour.Complete, cancellationToken: token);
+                .ToUniTask(TweenCancelBehaviour.Complete, token);
             stoneSpriteRenderer.sortingOrder = 0;
         }
 
@@ -100,7 +100,7 @@ namespace Game.Board.Square
                 .Append(stoneSpriteRenderer.transform.DORotate(Vector3.up * 0, 0.08f))
                 .Append(stone.DOLocalMoveY(0, 0.08f))
                 .SetLink(stone.gameObject)
-                .ToUniTask(tweenCancelBehaviour: TweenCancelBehaviour.Complete, cancellationToken: token);
+                .ToUniTask(TweenCancelBehaviour.Complete, token);
             
             stoneSpriteRenderer.sortingOrder = 0;
             currentStoneType = reversedStoneType;
