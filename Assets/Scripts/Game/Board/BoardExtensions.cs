@@ -20,19 +20,12 @@ namespace Game.Board
 
         public static bool HasEmpty(this Board board)
         {
-            for (var row = 0; row < board.RowCount; row++)
-            {
-                for (var col = 0; col < board.ColCount; col++)
-                {
-                    var type = board.GetStoneType(new Vector2Int(col, row));
-                    if (type == StoneType.Empty)
-                    {
-                        return true;
-                    }
-                }
-            }
+            return board.CastedStoneTypes.Any(type => type == StoneType.Empty);
+        }
 
-            return false;
+        private static bool IsEmpty(this Board board, Vector2Int pos)
+        {
+            return board.GetStoneType(pos) == StoneType.Empty;
         }
 
         public static List<Vector2Int> GetCanPutPoses(this Board board, StoneType stoneType)

@@ -86,10 +86,15 @@ namespace Game.Board
                 await UniTask.WaitUntil(() => selectedPos.HasValue, cancellationToken: token);
                 view.SetSquareHighlights(new List<Vector2Int>());
             }
-            else
+            else if(stoneType == StoneType.Enemy)
             {
-                selectedPos = EnemyLogic.CalculateBestPutStonePos(board, StoneType.Enemy);
-                await UniTask.Delay(600, cancellationToken: token);
+                const int delayMsec = 500;
+                var preTime = DateTime.Now;
+                selectedPos = await EnemyLogic.CalculatePutStonePos
+                    (board, StoneType.Enemy, EnemyLevelSetting.CurrentEnemyLevel, token);
+                var diffTime = DateTime.Now - preTime;
+                var additiveDelayMsec = Mathf.Max(0, delayMsec - (int) diffTime.TotalMilliseconds);
+                await UniTask.Delay(additiveDelayMsec, cancellationToken: token);
             }
         }
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -15,8 +16,10 @@ namespace Game.Board
         public int ColCount => stoneTypes.GetLength(0);
         public int RowCount => stoneTypes.GetLength(1);
 
-        public int PlayerStoneCount => stoneTypes.Cast<StoneType>().Count(type => type == StoneType.Player);
-        public int EnemyStoneCount => stoneTypes.Cast<StoneType>().Count(type => type == StoneType.Enemy);
+        public IEnumerable<StoneType> CastedStoneTypes => stoneTypes.Cast<StoneType>();
+
+        public int PlayerStoneCount => CastedStoneTypes.Count(type => type == StoneType.Player);
+        public int EnemyStoneCount => CastedStoneTypes.Count(type => type == StoneType.Enemy);
 
         public StoneType? GetStoneType(Vector2Int pos)
         {
@@ -32,14 +35,25 @@ namespace Game.Board
             return stoneTypes[pos.x, pos.y];
         }
 
-        public bool IsEmpty(Vector2Int pos)
-        {
-            return GetStoneType(pos) == StoneType.Empty;
-        }
-
         public void SetStone(StoneType stoneType, Vector2Int pos)
         {
             stoneTypes[pos.x, pos.y] = stoneType;
+        }
+
+        public Board Clone()
+        {
+            var clone = new Board(ColCount, RowCount);
+            for (var row = 0; row < RowCount; row++)
+            {
+                for (var col = 0; col < ColCount; col++)
+                {
+                    var pos = new Vector2Int(col, row);
+                    var type = GetStoneType(pos) ?? StoneType.Empty;
+                    clone.SetStone(type, pos);
+                }
+            }
+
+            return clone;
         }
     }
 
