@@ -47,6 +47,7 @@ namespace Game.Cycle
             turnPhaseSubscribers = new List<ISubscribeTurnPhase>
             {
                 boardManager.GetComponent<ISubscribeTurnPhase>(),
+                uiManager.GetComponent<ISubscribeTurnPhase>(),
                 backgroundManager.GetComponent<ISubscribeTurnPhase>()
             };
             
@@ -66,7 +67,9 @@ namespace Game.Cycle
 
         private void InitializeUI()
         {
-            uiManager.Initialize(boardManager.OnBoardChangedAsObservable);
+            boardManager.OnBoardChangedAsObservable
+                .Subscribe(board => uiManager.OnBoardChanged(board))
+                .AddTo(boardManager);
         }
 
         private void Execute()
