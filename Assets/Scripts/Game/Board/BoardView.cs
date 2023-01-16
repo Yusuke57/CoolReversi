@@ -24,6 +24,8 @@ namespace Game.Board
                 Destroy(squareParent.GetChild(i).gameObject);
             }
             
+            await UniTask.Delay(500, cancellationToken: token);
+            
             var colCount = board.ColCount;
             var rowCount = board.RowCount;
             squares = new SquareView[colCount, rowCount];

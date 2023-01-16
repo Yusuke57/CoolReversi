@@ -276,6 +276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stone: {fileID: 1061199789708124101}
   stoneSpriteRenderer: {fileID: 157795637749521542}
+  hoverStoneSpriteRenderer: {fileID: 0}
   highlightSpriteRenderer: {fileID: 4880266958502565975}
   colorPalette: {fileID: 11400000, guid: cecec4bf7d29b4ebfb8e2a9cfea9c11e, type: 2}
 --- !u!1 &8918156071255959922

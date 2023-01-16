@@ -639,7 +639,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &282808407
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1396,6 +1396,9 @@ MonoBehaviour:
   - name: 10
     clip: {fileID: 8300000, guid: d37763f91a4f24697837bddfb4d6a80e, type: 3}
     volume: 0.8
+  - name: 90
+    clip: {fileID: 8300000, guid: d37763f91a4f24697837bddfb4d6a80e, type: 3}
+    volume: 0.8
   - name: 100
     clip: {fileID: 8300000, guid: 695d2157843694189a37d5cf0050128e, type: 3}
     volume: 0.6
@@ -1565,7 +1568,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: AI  LEVEL
+  m_text: COM  LEVEL
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2f87064edc6a840ebac41822affe9a42, type: 2}
   m_sharedMaterial: {fileID: -3762901408048088219, guid: 2f87064edc6a840ebac41822affe9a42, type: 2}
@@ -1592,12 +1595,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 40
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -3660,7 +3663,7 @@ GameObject:
   - component: {fileID: 1855072960}
   - component: {fileID: 1855072961}
   m_Layer: 5
-  m_Name: Inactive
+  m_Name: Dummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4195,7 +4198,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2135466256
 RectTransform:
   m_ObjectHideFlags: 0

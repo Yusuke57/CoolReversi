@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 namespace Game.Board.Square
 {
-    public class SquareView : MonoBehaviour, IPointerClickHandler
+    public class SquareView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private Transform stone;
         [SerializeField] private SpriteRenderer stoneSpriteRenderer;
@@ -18,9 +18,25 @@ namespace Game.Board.Square
         private Action onClickAction;
         private StoneType currentStoneType;
 
+        private Tweener highlightTweener;
+
+        private const float DEFAULT_HIGHLIGHT_ALPHA = 0.3f;
+        private const float HOVER_HIGHLIGHT_ALPHA = 0.7f;
+
         public void OnPointerClick(PointerEventData eventData)
         {
             onClickAction?.Invoke();
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            SetHighlightAlpha(HOVER_HIGHLIGHT_ALPHA);
+            SEPlayer.I.Play(SEPlayer.SEName.HoverSquare);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            SetHighlightAlpha(DEFAULT_HIGHLIGHT_ALPHA);
         }
 
         public void Initialize(Vector2 pos, Action onClick)
@@ -44,9 +60,16 @@ namespace Game.Board.Square
         {
             if (isActive)
             {
-                highlightSpriteRenderer.DOFade(0.3f, 0);
+                SetHighlightAlpha(DEFAULT_HIGHLIGHT_ALPHA);
             }
             highlightSpriteRenderer.gameObject.SetActive(isActive);
+        }
+
+        private void SetHighlightAlpha(float alpha)
+        {
+            var color = highlightSpriteRenderer.color;
+            color.a = alpha;
+            highlightSpriteRenderer.color = color;
         }
 
         private void SetEmpty()
