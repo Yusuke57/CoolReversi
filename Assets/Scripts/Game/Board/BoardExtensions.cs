@@ -20,12 +20,12 @@ namespace Game.Board
 
         public static bool HasEmpty(this Board board)
         {
-            return board.CastedStoneTypes.Any(type => type == StoneType.Empty);
+            return board.CastedStoneTypes.Any(stoneType => stoneType == null);
         }
 
         private static bool IsEmpty(this Board board, Vector2Int pos)
         {
-            return board.GetStoneType(pos) == StoneType.Empty;
+            return board.GetStoneType(pos) == null;
         }
 
         public static List<Vector2Int> GetCanPutPoses(this Board board, StoneType stoneType)
@@ -57,19 +57,13 @@ namespace Game.Board
         
         private static List<Vector2Int> GetReversePoses(this Board board, StoneType stoneType, Vector2Int putPos, Vector2Int direction)
         {
-            if (stoneType == StoneType.Empty)
-            {
-                Debug.LogError("putType is Empty");
-                return new List<Vector2Int>();
-            }
-
             var reversePoses = new List<Vector2Int>();
             var targetPos = putPos;
             while (true)
             {
                 targetPos += direction;
-                var targetType = board.GetStoneType(targetPos);
-                if (targetType is null or StoneType.Empty)
+                var targetType = board.IsValidPos(targetPos) ? board.GetStoneType(targetPos) : null;
+                if (targetType == null)
                 {
                     reversePoses.Clear();
                     break;

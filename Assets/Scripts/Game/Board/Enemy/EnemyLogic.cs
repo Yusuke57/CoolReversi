@@ -112,12 +112,12 @@ namespace Game.Board.Enemy
         private static Board CreateStoneReversedBoard(Board originBoard, StoneType stoneType, Vector2Int putPos)
         {
             var board = originBoard.Clone();
-            board.SetStone(stoneType, putPos);
+            board.SetStoneType(stoneType, putPos);
             
             var reversePoses = board.GetReversePoses(stoneType, putPos).SelectMany(poses => poses);
             foreach (var reversePos in reversePoses)
             {
-                board.SetStone(stoneType, reversePos);
+                board.SetStoneType(stoneType, reversePos);
             }
 
             return board;

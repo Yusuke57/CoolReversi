@@ -16,7 +16,6 @@ namespace Common
             {
                 StoneType.Player => playerStoneColor,
                 StoneType.Enemy => enemyStoneColor,
-                StoneType.Empty => Color.clear,
                 _ => throw new ArgumentOutOfRangeException(nameof(stoneType), stoneType, null)
             };
         }

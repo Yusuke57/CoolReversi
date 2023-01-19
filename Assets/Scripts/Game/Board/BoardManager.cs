@@ -63,7 +63,7 @@ namespace Game.Board
             };
             foreach (var (pos, type) in firstStones)
             {
-                board.SetStone(type, pos);
+                board.SetStoneType(type, pos);
                 onBoardChangedSubject.OnNext(board);
                 await view.PutStone(type, pos, token);
             }
@@ -117,7 +117,7 @@ namespace Game.Board
                 return;
             }
             
-            board.SetStone(stoneType, selectedPos.Value);
+            board.SetStoneType(stoneType, selectedPos.Value);
             onBoardChangedSubject.OnNext(board);
             await view.PutStone(stoneType, selectedPos.Value, token);
         }
@@ -154,7 +154,7 @@ namespace Game.Board
 
         private async UniTask ReverseStone(StoneType stoneType, Vector2Int pos, CancellationToken token)
         {
-            board.SetStone(stoneType, pos);
+            board.SetStoneType(stoneType, pos);
             onBoardChangedSubject.OnNext(board);
             await view.ReverseStone(pos, token);
         }

@@ -16,7 +16,7 @@ namespace Game.Board.Square
         [SerializeField] private ColorPalette colorPalette;
 
         private Action onClickAction;
-        private StoneType currentStoneType;
+        private StoneType? currentStoneType;
 
         private Tweener highlightTweener;
 
@@ -75,19 +75,13 @@ namespace Game.Board.Square
         private void SetEmpty()
         {
             stoneSpriteRenderer.gameObject.SetActive(false);
-            currentStoneType = StoneType.Empty;
+            currentStoneType = null;
         }
 
-        public async UniTask PutStone(StoneType type, CancellationToken token)
+        public async UniTask PutStone(StoneType stoneType, CancellationToken token)
         {
-            if (type == StoneType.Empty)
-            {
-                SetEmpty();
-                return;
-            }
-
-            currentStoneType = type;
-            SetStoneColor(type);
+            currentStoneType = stoneType;
+            SetStoneColor(stoneType);
             stoneSpriteRenderer.gameObject.SetActive(true);
 
             stone.localPosition = Vector3.up;
@@ -107,11 +101,6 @@ namespace Game.Board.Square
 
         public async UniTask ReverseStone(CancellationToken token)
         {
-            if (currentStoneType == StoneType.Empty)
-            {
-                return;
-            }
-
             var reversedStoneType = currentStoneType == StoneType.Player ? StoneType.Enemy : StoneType.Player;
             stoneSpriteRenderer.sortingOrder = 1;
             
