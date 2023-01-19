@@ -1153,7 +1153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardManager: {fileID: 990788509}
   uiManager: {fileID: 1997906375}
-  backgroundManager: {fileID: 193055404}
+  backgroundColorChanger: {fileID: 193055404}
   finishGameCheckerObject: {fileID: 990788506}
 --- !u!4 &522961258
 Transform:

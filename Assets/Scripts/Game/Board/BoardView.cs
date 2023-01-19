@@ -13,33 +13,35 @@ namespace Game.Board
         [SerializeField] private Transform cellParent;
         [SerializeField] private CellView cellPrefab;
 
-        private CellView[,] cells;
+        private CellView[,] cellViews;
         
         public Action<Vector2Int> OnSelected { private get; set; }
 
         public async UniTask CreateBoard(Board board, CancellationToken token)
         {
-            for (var i = cellParent.childCount - 1; i >= 0; i--)
-            {
-                Destroy(cellParent.GetChild(i).gameObject);
-            }
-            
-            await UniTask.Delay(500, cancellationToken: token);
-            
             var colCount = board.ColCount;
             var rowCount = board.RowCount;
-            cells = new CellView[colCount, rowCount];
-            var offset = new Vector2(-colCount / 2f + 0.5f, -rowCount / 2f + 0.5f);
+            ResetView(colCount, rowCount);
 
+            await UniTask.Delay(500, cancellationToken: token);
+
+            var offset = new Vector2(-colCount / 2f + 0.5f, -rowCount / 2f + 0.5f);
+            var defaultQuaternion = Quaternion.Euler(Vector3.zero);
             for (var col = 0; col < colCount; col++)
             {
                 for (var row = 0; row < rowCount; row++)
                 {
                     var pos = new Vector2Int(col, row);
                     var worldPos = pos + offset;
-                    var cell = Instantiate(cellPrefab, cellParent);
-                    cell.Initialize(worldPos, () => OnSelected?.Invoke(pos));
-                    cells[col, row] = cell;
+                    var cellView = cellViews[col, row];
+                    if (cellView == null)
+                    {
+                        cellView = Instantiate(cellPrefab, worldPos, defaultQuaternion, cellParent);
+                        cellView.OnClickAction = () => OnSelected?.Invoke(pos);
+                        cellViews[col, row] = cellView;
+                    }
+                    cellView.ResetView();
+                    cellView.gameObject.SetActive(true);
                 }
 
                 SEPlayer.I.Play(SEPlayer.SEName.CreateBoard);
@@ -47,26 +49,42 @@ namespace Game.Board
             }
         }
 
+        private void ResetView(int colCount, int rowCount)
+        {
+            // col/rowが変わるなら要対応。面倒なので対応してない
+            if (cellViews == null)
+            {
+                cellViews = new CellView[colCount, rowCount];
+            }
+            else
+            {
+                foreach (var cellView in cellViews)
+                {
+                    cellView.gameObject.SetActive(false);
+                }
+            }
+        }
+
         public void SetCellHighlights(List<Vector2Int> highlightPoses)
         {
-            for (var col = 0; col < cells.GetLength(0); col++)
+            for (var col = 0; col < cellViews.GetLength(0); col++)
             {
-                for (var row = 0; row < cells.GetLength(1); row++)
+                for (var row = 0; row < cellViews.GetLength(1); row++)
                 {
                     var pos = new Vector2Int(col, row);
-                    cells[col, row].SetHighlight(highlightPoses.Contains(pos));
+                    cellViews[col, row].SetHighlight(highlightPoses.Contains(pos));
                 }
             }
         }
 
         public async UniTask PutStone(StoneType stoneType, Vector2Int pos, CancellationToken token)
         {
-            await cells[pos.x, pos.y].PutStone(stoneType, token);
+            await cellViews[pos.x, pos.y].PutStone(stoneType, token);
         }
 
         public async UniTask ReverseStone(Vector2Int pos, CancellationToken token)
         {
-            await cells[pos.x, pos.y].ReverseStone(token);
+            await cellViews[pos.x, pos.y].ReverseStone(token);
         }
     }
 }

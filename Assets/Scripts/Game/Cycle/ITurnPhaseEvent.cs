@@ -4,7 +4,7 @@ using Game.Board;
 
 namespace Game.Cycle
 {
-    public interface ISubscribeTurnPhase
+    public interface ITurnPhaseEvent
     {
         public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, StoneType stoneType, CancellationToken token);
     }

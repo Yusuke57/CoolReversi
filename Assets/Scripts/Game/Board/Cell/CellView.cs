@@ -15,17 +15,17 @@ namespace Game.Board.Cell
         [SerializeField] private SpriteRenderer highlightSpriteRenderer;
         [SerializeField] private ColorPalette colorPalette;
 
-        private Action onClickAction;
         private StoneType? currentStoneType;
-
         private Tweener highlightTweener;
 
+        public Action OnClickAction { private get; set; }
+        
         private const float DEFAULT_HIGHLIGHT_ALPHA = 0.3f;
         private const float HOVER_HIGHLIGHT_ALPHA = 0.7f;
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            onClickAction?.Invoke();
+            OnClickAction?.Invoke();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -39,11 +39,8 @@ namespace Game.Board.Cell
             SetHighlightAlpha(DEFAULT_HIGHLIGHT_ALPHA);
         }
 
-        public void Initialize(Vector2 pos, Action onClick)
+        public void ResetView()
         {
-            transform.position = pos;
-            onClickAction = onClick;
-            
             stoneSpriteRenderer.sortingOrder = 0;
             SetHighlight(false);
             SetEmpty();

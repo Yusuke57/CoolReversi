@@ -17,12 +17,12 @@ namespace Game.Cycle
     {
         [SerializeField] private BoardManager boardManager;
         [SerializeField] private UIManager uiManager;
-        [SerializeField] private BackgroundManager backgroundManager;
+        [SerializeField] private BackgroundColorChanger backgroundColorChanger;
         [SerializeField] private GameObject finishGameCheckerObject;
         
-        private List<ISubscribeGamePhase> gamePhaseSubscribers;
-        private List<ISubscribeTurnPhase> turnPhaseSubscribers;
-        private ICheckFinishGame finishGameChecker;
+        private List<IGamePhaseEvent> gamePhaseSubscribers;
+        private List<ITurnPhaseEvent> turnPhaseSubscribers;
+        private ICheckFinishedGame finishGameChecker;
         
         private GameCycle cycle;
         private CancellationTokenSource tokenSource;
@@ -37,21 +37,21 @@ namespace Game.Cycle
 
         private void CacheInterfaces()
         {
-            gamePhaseSubscribers = new List<ISubscribeGamePhase>
+            gamePhaseSubscribers = new List<IGamePhaseEvent>
             {
-                boardManager.GetComponent<ISubscribeGamePhase>(),
-                uiManager.GetComponent<ISubscribeGamePhase>(),
-                backgroundManager.GetComponent<ISubscribeGamePhase>()
+                boardManager.GetComponent<IGamePhaseEvent>(),
+                uiManager.GetComponent<IGamePhaseEvent>(),
+                backgroundColorChanger.GetComponent<IGamePhaseEvent>()
             };
             
-            turnPhaseSubscribers = new List<ISubscribeTurnPhase>
+            turnPhaseSubscribers = new List<ITurnPhaseEvent>
             {
-                boardManager.GetComponent<ISubscribeTurnPhase>(),
-                uiManager.GetComponent<ISubscribeTurnPhase>(),
-                backgroundManager.GetComponent<ISubscribeTurnPhase>()
+                boardManager.GetComponent<ITurnPhaseEvent>(),
+                uiManager.GetComponent<ITurnPhaseEvent>(),
+                backgroundColorChanger.GetComponent<ITurnPhaseEvent>()
             };
             
-            finishGameChecker = finishGameCheckerObject.GetComponent<ICheckFinishGame>();
+            finishGameChecker = finishGameCheckerObject.GetComponent<ICheckFinishedGame>();
         }
 
         private void RegisterRetryAction()

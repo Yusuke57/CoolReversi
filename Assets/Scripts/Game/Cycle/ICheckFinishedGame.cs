@@ -1,6 +1,6 @@
 namespace Game.Cycle
 {
-    public interface ICheckFinishGame
+    public interface ICheckFinishedGame
     {
         public bool IsFinishedGame();
     }

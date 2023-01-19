@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game.UI
 {
-    public class UIManager : MonoBehaviour, ISubscribeGamePhase, ISubscribeTurnPhase
+    public class UIManager : MonoBehaviour, IGamePhaseEvent, ITurnPhaseEvent
     {
         [SerializeField] private ScoreView scoreView;
         [SerializeField] private EnemyLevelView enemyLevelView;

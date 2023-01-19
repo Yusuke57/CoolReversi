@@ -34,17 +34,19 @@ namespace Game.UI
             playerScoreText.text = playerScore.ToString("D2");
             enemyScoreText.text = enemyScore.ToString("D2");
 
+            const float punchScale = 1.1f;
+            const float punchDuration = 0.1f;
             if (prePlayerScore != playerScore)
             {
                 playerScoreTweener?.Complete();
-                playerScoreText.transform.localScale = Vector3.one * 1.1f;
-                playerScoreTweener = playerScoreText.transform.DOScale(1, 0.1f);
+                playerScoreText.transform.localScale = Vector3.one * punchScale;
+                playerScoreTweener = playerScoreText.transform.DOScale(1, punchDuration);
             }
             if (preEnemyScore != enemyScore)
             {
                 enemyScoreTweener?.Complete();
-                enemyScoreText.transform.localScale = Vector3.one * 1.1f;
-                enemyScoreTweener = enemyScoreText.transform.DOScale(1, 0.1f);
+                enemyScoreText.transform.localScale = Vector3.one * punchScale;
+                enemyScoreTweener = enemyScoreText.transform.DOScale(1, punchDuration);
             }
         }
 

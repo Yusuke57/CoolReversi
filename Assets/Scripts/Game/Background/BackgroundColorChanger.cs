@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Game.Background
 {
-    public class BackgroundManager : MonoBehaviour, ISubscribeGamePhase, ISubscribeTurnPhase
+    public class BackgroundColorChanger : MonoBehaviour, IGamePhaseEvent, ITurnPhaseEvent
     {
         [SerializeField] private SpriteRenderer turnColorSpriteRenderer;
         [SerializeField] private ColorPalette colorPalette;

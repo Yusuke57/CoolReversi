@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Game.Board
 {
-    public class BoardManager : MonoBehaviour, ISubscribeGamePhase, ISubscribeTurnPhase, ICheckFinishGame
+    public class BoardManager : MonoBehaviour, IGamePhaseEvent, ITurnPhaseEvent, ICheckFinishedGame
     {
         [SerializeField] private BoardView view;
         

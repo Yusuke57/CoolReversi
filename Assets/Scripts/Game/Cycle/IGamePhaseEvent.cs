@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Cycle
 {
-    public interface ISubscribeGamePhase
+    public interface IGamePhaseEvent
     {
         public UniTask OnGamePhaseChanged(GameCycle.GamePhase phase, CancellationToken token);
     }
