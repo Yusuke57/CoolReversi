@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 4880266958878292434}
   - component: {fileID: 557136639732843385}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

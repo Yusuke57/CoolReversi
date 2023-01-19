@@ -6,9 +6,9 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Game.Board.Square
+namespace Game.Board.Cell
 {
-    public class SquareView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+    public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private Transform stone;
         [SerializeField] private SpriteRenderer stoneSpriteRenderer;
@@ -31,7 +31,7 @@ namespace Game.Board.Square
         public void OnPointerEnter(PointerEventData eventData)
         {
             SetHighlightAlpha(HOVER_HIGHLIGHT_ALPHA);
-            SEPlayer.I.Play(SEPlayer.SEName.HoverSquare);
+            SEPlayer.I.Play(SEPlayer.SEName.HoverCell);
         }
 
         public void OnPointerExit(PointerEventData eventData)

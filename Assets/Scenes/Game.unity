@@ -2439,8 +2439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f968b3526ee41a195d07807da4d86fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squareParent: {fileID: 1896181710}
-  squarePrefab: {fileID: 557136639732843385, guid: c96d8303e55724a39b951154d1b99a7b, type: 3}
+  cellParent: {fileID: 1896181710}
+  cellPrefab: {fileID: 557136639732843385, guid: c96d8303e55724a39b951154d1b99a7b, type: 3}
 --- !u!114 &990788509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3843,7 +3843,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1896181710}
   m_Layer: 0
-  m_Name: Squares
+  m_Name: Cells
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

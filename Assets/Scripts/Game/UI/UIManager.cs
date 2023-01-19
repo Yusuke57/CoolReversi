@@ -47,7 +47,7 @@ namespace Game.UI
         
         public UniTask OnTurnPhaseChanged(GameCycle.TurnPhase phase, StoneType stoneType, CancellationToken token)
         {
-            if (phase == GameCycle.TurnPhase.SelectSquare && !cachedBoard.GetCanPutPoses(stoneType).Any())
+            if (phase == GameCycle.TurnPhase.SelectCell && !cachedBoard.GetCanPutPoses(stoneType).Any())
             {
                 return ShowPass(token);
             }

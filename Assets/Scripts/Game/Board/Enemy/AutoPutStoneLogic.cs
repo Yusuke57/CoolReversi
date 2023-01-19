@@ -6,7 +6,10 @@ using UnityEngine;
 
 namespace Game.Board.Enemy
 {
-    public static class EnemyLogic
+    /// <summary>
+    /// いわゆるAI
+    /// </summary>
+    public static class AutoPutStoneLogic
     {
         private static readonly int[,] cellEvaluations =
         {

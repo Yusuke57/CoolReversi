@@ -41,7 +41,7 @@ namespace Game.Board
         {
             return phase switch
             {
-                GameCycle.TurnPhase.SelectSquare => SelectSquare(stoneType, token),
+                GameCycle.TurnPhase.SelectCell => SelectCell(stoneType, token),
                 GameCycle.TurnPhase.PutStone => PutStone(stoneType, token),
                 GameCycle.TurnPhase.ReverseStones => ReverseStones(stoneType, token),
                 _ => UniTask.CompletedTask
@@ -69,7 +69,7 @@ namespace Game.Board
             }
         }
 
-        private async UniTask SelectSquare(StoneType stoneType, CancellationToken token)
+        private async UniTask SelectCell(StoneType stoneType, CancellationToken token)
         {
             selectedPos = null;
             var canPutPoses = board.GetCanPutPoses(stoneType);
@@ -82,28 +82,28 @@ namespace Game.Board
 
             if (stoneType == StoneType.Player)
             {
-                await SelectSquareForPlayer(canPutPoses, token);
+                await SelectCellForPlayer(canPutPoses, token);
             }
             else if(stoneType == StoneType.Enemy)
             {
-                await SelectSquareForEnemy(token);
+                await SelectCellForEnemy(token);
             }
         }
 
-        private async UniTask SelectSquareForPlayer(List<Vector2Int> canPutPoses, CancellationToken token)
+        private async UniTask SelectCellForPlayer(List<Vector2Int> canPutPoses, CancellationToken token)
         {
-            view.SetSquareHighlights(canPutPoses);
+            view.SetCellHighlights(canPutPoses);
             await UniTask.WaitUntil(() => selectedPos.HasValue, cancellationToken: token);
-            view.SetSquareHighlights(new List<Vector2Int>());
+            view.SetCellHighlights(new List<Vector2Int>());
         }
 
-        private async UniTask SelectSquareForEnemy(CancellationToken token)
+        private async UniTask SelectCellForEnemy(CancellationToken token)
         {
             const int delayMsec = 500;
             var preTime = DateTime.Now;
             var currentEnemyLevel = EnemyLevelSetting.CurrentEnemyLevel;
             
-            selectedPos = await EnemyLogic.CalculatePutStonePos(board, StoneType.Enemy, currentEnemyLevel, token);
+            selectedPos = await AutoPutStoneLogic.CalculatePutStonePos(board, StoneType.Enemy, currentEnemyLevel, token);
                 
             var diffTime = DateTime.Now - preTime;
             var additiveDelayMsec = Mathf.Max(0, delayMsec - (int) diffTime.TotalMilliseconds);

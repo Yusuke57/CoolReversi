@@ -32,7 +32,7 @@ namespace Common
         {
             CreateBoard = 10,
             
-            HoverSquare = 90,
+            HoverCell = 90,
             PutStone = 100,
             ReverseStone = 110,
             

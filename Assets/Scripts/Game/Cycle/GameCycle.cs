@@ -14,7 +14,7 @@ namespace Game.Cycle
 
         public enum TurnPhase
         {
-            SelectSquare,
+            SelectCell,
             PutStone,
             ReverseStones
         }
@@ -50,7 +50,7 @@ namespace Game.Cycle
         
         private async UniTask PlayTurn(bool isPlayerTurn, CancellationToken token)
         {
-            await (OnTurnPhaseChanged?.Invoke(TurnPhase.SelectSquare, isPlayerTurn, token) ?? UniTask.CompletedTask);
+            await (OnTurnPhaseChanged?.Invoke(TurnPhase.SelectCell, isPlayerTurn, token) ?? UniTask.CompletedTask);
             await (OnTurnPhaseChanged?.Invoke(TurnPhase.PutStone, isPlayerTurn, token) ?? UniTask.CompletedTask);
             await UniTask.Delay(100, cancellationToken: token);
             await (OnTurnPhaseChanged?.Invoke(TurnPhase.ReverseStones, isPlayerTurn, token) ?? UniTask.CompletedTask);
